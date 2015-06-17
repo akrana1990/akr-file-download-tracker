@@ -77,26 +77,37 @@ class Akr_file_download_tracker {
 
     public function send_email($name, $email, $pdf_id) {
 
-            // sanitize form values
-            $name = sanitize_text_field($name);
-            $email = sanitize_email($email);
-            $pdf_url=wp_get_attachment_url($pdf_id);
+        // sanitize form values
+        $name = sanitize_text_field($name);
+        $email = sanitize_email($email);
+        $pdf_url=wp_get_attachment_url($pdf_id);
 
-            $subject = 'Test';
-            $message = 'Test'.$pdf_url;
+        $subject = 'Test';
+        $message = 'Test'.$pdf_url;
 
-            // get the blog administrator's email address
-            //$to = get_option('admin_email');
-            $to=$email;
+        // get the blog administrator's email address
+        //$to = get_option('admin_email');
+        $to=$email;
 
-            $headers = "From: $name <$email>" . "\r\n";
+        $headers = "From: $name <$email>" . "\r\n";
 
-            // If email has been process for sending, display a success message
-            if ( wp_mail($to, $subject, $message, $headers) )
-                echo '<div style="background: #3b5998; color:#fff; padding:2px;margin:2px">';
+        // If email has been process for sending, display a success message
+        if ( wp_mail($to, $subject, $message, $headers) )
+        {
+            echo '<div style="background: #3b5998; color:#fff; padding:2px;margin:2px">';
             echo 'Thanks for contacting me, expect a response soon.';
             echo '</div>';
+            $this->insert_db($name,$email,$pdf_id);
+        }
 
+    }
+    public function insert_db($name,$email,$pdf_id)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . "file_downloader";
+        $file_title=get_the_title($pdf_id);
+        $sql="INSERT INTO $table_name(name,email,file_title) VALUES ($name,$email,$file_title)";
+        $wpdb->query($sql);
     }
 
     public function process_functions($file_ids) {
