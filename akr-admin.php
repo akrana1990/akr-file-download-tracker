@@ -4,10 +4,10 @@
 if (!defined('ABSPATH')) exit;
 if (!defined('AFDT_BASE_FILE')) wp_die('What ?');
 
-class Ank_Download_Tracker_Admin
+class Akr_file_download_tracker_Admin
 {
 
-    private $plugin_slug = 'adt_options_page';
+    private $plugin_slug = 'afdt_options_page';
 
     function __construct()
     {
@@ -45,7 +45,7 @@ class Ank_Download_Tracker_Admin
     function add_to_settings_menu()
     {
 
-        add_submenu_page('options-general.php', 'Ank Download Tracker', 'Ank Download Tracker', 'manage_options', $this->plugin_slug, array($this, 'AFDT_options_page'));
+        add_submenu_page('options-general.php', 'Afdt Download Tracker', 'Afdt Download Tracker', 'manage_options', $this->plugin_slug, array($this, 'AFDT_options_page'));
 
     }
 

@@ -135,7 +135,22 @@ class Akr_file_download_tracker {
         self::form();
     }
 
-    public function do_shortcode() {
+    public function do_shortcode($params) {
+
+        $params = shortcode_atts(array(
+            'file_ids' => array(),
+        ), $params);
+
+        $params['file_ids'] = explode(',',$params['file_ids']);
+        if(empty($params['file_ids'])) return;
+
+        var_dump($params['file_ids']);
+
+        foreach($params['file_ids'] as $id){
+           echo wp_get_attachment_url( absint($id) )."<br>";
+            echo get_the_title(absint($id));
+        }
+
         ob_start();
         $this->process_functions();
         return ob_get_clean();
@@ -146,12 +161,12 @@ class Akr_file_download_tracker {
 
 if (is_admin()) {
     /* Load admin part only if we are inside wp-admin */
-    require(trailingslashit(dirname(__FILE__)) . "adt-admin.php");
+    require(trailingslashit(dirname(__FILE__)) . "akr-admin.php");
     //init admin class
-    global $Ank_Download_Tracker_Admin;
-    $Ank_Download_Tracker_Admin = new Ank_Download_Tracker_Admin();
+    global $Akr_file_download_tracker_Admin;
+    $Akr_file_download_tracker_Admin = new Akr_file_download_tracker_Admin();
 } else {
     /*init front end part*/
-    global $Ank_Download_Tracker;
-    $Ank_Download_Tracker = new Akr_file_download_tracker();
+    global $Akr_file_download_tracker;
+    $Akr_file_download_tracker = new Akr_file_download_tracker();
 }
