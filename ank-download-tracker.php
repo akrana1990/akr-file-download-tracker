@@ -27,49 +27,40 @@ class Akr_file_download_tracker {
         add_shortcode('akr_show_form', array($this, 'do_shortcode'));
     }
 
-    static public function form()
+    static public function form($file_ids)
     {
-        $name='';
-        $email='';
-        if(isset($_POST['afdt-name']))
-        {
-            $name=$_POST["afdt-name"];
-        }
-        if(isset($_POST['afdt-email']))
-        {
-            $email=$_POST["afdt-email"];
-        }
-        echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">';
+        ?>
+        <form action="<?php echo $_SERVER['REQUEST_URI'] ?>" method="post">
+            <p>Your Name (required) <br/>
+                <input type="text" name="afdt-name" value="" size="40">
+            </p>
 
-        echo '<p>';
-        echo 'Your Name (required) <br/>';
-        echo '<input type="text" name="afdt-name" value="' . $name . '" size="40" />';
-        echo '</p>';
+            <p>Your Email (required) <br/>
+                <input type="text" name="afdt-email" value="" size="40" />
+            </p>
 
-        echo '<p>';
-        echo 'Your Email (required) <br/>';
-        echo '<input type="text" name="afdt-email" value="' . $email . '" size="40" />';
-        echo '</p>';
+            <p>Select PDF (required) <br/>
+                <select style="width: 100%" name="afdt-pdf" >
+                    <option disabled selected>Select</option>
+                    <?php
+                    foreach($file_ids as $id) {
+                        //echo wp_get_attachment_url( absint($id) );
+                        //echo get_the_title(absint($id));                   }
+                        echo '<option value="' . $id . '">' . get_the_title(absint($id)) . '</option>';
+                        }
+                    ?>
+                </select>
+            </p><br>
 
-        echo '<p>';
-        echo 'Select PDF (required) <br/>';
-        echo '<select style="width: 38%" name="afdt-pdf" >';
-        echo '<option value="0">Select</option>';
-        echo '<option value="1">2015-16 Elementary Years Application</option>';
-        echo '<option value="2">2015-16 Middle Years Application</option>';
-        echo '<option value="3">2015-16 Upper Years Application</option>';
-        echo '</select>';
-        echo '</p><br>';
-
-        echo '<p><input type="submit" name="form-submitted" value="Send"></p>';
-        echo '</form>';
-
+            <p><input type="submit" name="form-submitted" value="Send"></p>
+        </form>
+        <?php
     }
 
-    public function validate_form( $name, $email,$pdf ) {
+    public function validate_form( $name, $email,$pdf_id ) {
 
         // If any field is left empty, add the error message to the error array
-        if ( empty($name) || empty($email) || empty($pdf) ) {
+        if ( empty($name) || empty($email) || empty($pdf_id) ) {
             array_push( $this->form_errors, 'No field should be left empty' );
         }
 
@@ -84,16 +75,15 @@ class Akr_file_download_tracker {
         }
     }
 
-    public function send_email($name, $email) {
-
-        // Ensure the error array ($form_errors) contain no error
-        if ( count($this->form_errors) < 1 ) {
+    public function send_email($name, $email, $pdf_id) {
 
             // sanitize form values
             $name = sanitize_text_field($name);
             $email = sanitize_email($email);
+            $pdf_url=wp_get_attachment_url($pdf_id);
+
             $subject = 'Test';
-            $message = 'Test';
+            $message = 'Test'.$pdf_url;
 
             // get the blog administrator's email address
             //$to = get_option('admin_email');
@@ -106,20 +96,21 @@ class Akr_file_download_tracker {
                 echo '<div style="background: #3b5998; color:#fff; padding:2px;margin:2px">';
             echo 'Thanks for contacting me, expect a response soon.';
             echo '</div>';
-        }
+
     }
 
-    public function process_functions() {
+    public function process_functions($file_ids) {
         if ( isset($_POST['form-submitted']) ) {
 
             $name=isset($_POST["afdt-name"])?$_POST['afdt-name']:'';
             $email=isset($_POST["afdt-email"])?$_POST['afdt-email']:'';
-            $pdf=$_POST['afdt-pdf'];
+            $pdf_id=$_POST['afdt-pdf'];
             // call validate_form() to validate the form values
-            $this->validate_form($name, $email, $pdf);
+            $this->validate_form($name, $email, $pdf_id);
 
             // display form error if it exist
-            if (is_array($this->form_errors)) {
+            if (is_array($this->form_errors))
+            {
                 foreach ($this->form_errors as $error) {
                     echo '<div>';
                     echo '<strong>ERROR</strong>:';
@@ -127,15 +118,17 @@ class Akr_file_download_tracker {
                     echo '</div>';
                 }
             }
-            $this->send_email( $name, $email );
+            // Ensure the error array ($form_errors) contain no error
+            if ( count($this->form_errors) < 1 )
+            {
+                $this->send_email($name, $email, $pdf_id);
+            }
         }
-
-
-
-        self::form();
+        self::form($file_ids);
     }
 
-    public function do_shortcode($params) {
+    public function do_shortcode($params)
+    {
 
         $params = shortcode_atts(array(
             'file_ids' => array(),
@@ -146,13 +139,8 @@ class Akr_file_download_tracker {
 
         var_dump($params['file_ids']);
 
-        foreach($params['file_ids'] as $id){
-           echo wp_get_attachment_url( absint($id) )."<br>";
-            echo get_the_title(absint($id));
-        }
-
         ob_start();
-        $this->process_functions();
+        $this->process_functions($params['file_ids']);
         return ob_get_clean();
     }
 

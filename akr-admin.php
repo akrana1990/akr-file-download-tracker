@@ -27,7 +27,19 @@ class Akr_file_download_tracker_Admin
 
     function create_new_table()
     {
+        global $wpdb;
+        $table_name = $wpdb->prefix . "file_downloader";
+        $sql = "CREATE TABLE $table_name (
+                id mediumint(9) NOT NULL AUTO_INCREMENT,
+                name tinytext NOT NULL,
+                email VARCHAR(100) NOT NULL,
+                file_title VARCHAR(100) NOT NULL ,
+                date TIMESTAMP DEFAULT '0000-00-00 00:00:00' NOT NULL,
+                PRIMARY KEY id (id)
+                )";
 
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
     }
 
     function add_plugin_actions_links($links, $file)
@@ -58,16 +70,6 @@ class Akr_file_download_tracker_Admin
     <?php
 
     }
-
-    /*function process_download_request()
-    {
-        if (isset($_GET['action']) && $_GET['action'] === AFDT_AJX_ACTION) {
-
-
-            //form handling
-            die('1');
-        }
-    }*/
 
 
 }
