@@ -99,6 +99,10 @@ class Akr_file_download_tracker {
             echo '</div>';
             $this->insert_db($name,$email,$pdf_id);
         }
+        else
+        {
+            die('hello');
+        }
 
     }
     public function insert_db($name,$email,$pdf_id)
@@ -106,7 +110,7 @@ class Akr_file_download_tracker {
         global $wpdb;
         $table_name = $wpdb->prefix . "file_downloader";
         $file_title=get_the_title($pdf_id);
-        $sql="INSERT INTO $table_name(name,email,file_title) VALUES ($name,$email,$file_title)";
+        $sql="INSERT INTO $table_name(name,email,file_title,date) VALUES ('$name','$email','$file_title',CURTIME())";
         $wpdb->query($sql);
     }
 
