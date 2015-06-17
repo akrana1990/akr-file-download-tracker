@@ -31,35 +31,45 @@ class Akr_file_download_tracker {
     {
         $name='';
         $email='';
-        if(isset($_POST['your-name']))
+        if(isset($_POST['afdt-name']))
         {
-            $name=$_POST["your-name"];
+            $name=$_POST["afdt-name"];
         }
-        if(isset($_POST['your-email']))
+        if(isset($_POST['afdt-email']))
         {
-            $email=$_POST["your-email"];
+            $email=$_POST["afdt-email"];
         }
         echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">';
 
         echo '<p>';
         echo 'Your Name (required) <br/>';
-        echo '<input type="text" name="your-name" value="' . $name . '" size="40" />';
+        echo '<input type="text" name="afdt-name" value="' . $name . '" size="40" />';
         echo '</p>';
 
         echo '<p>';
         echo 'Your Email (required) <br/>';
-        echo '<input type="text" name="your-email" value="' . $email . '" size="40" />';
+        echo '<input type="text" name="afdt-email" value="' . $email . '" size="40" />';
         echo '</p>';
+
+        echo '<p>';
+        echo 'Select PDF (required) <br/>';
+        echo '<select style="width: 38%" name="afdt-pdf" >';
+        echo '<option value="0">Select</option>';
+        echo '<option value="1">2015-16 Elementary Years Application</option>';
+        echo '<option value="2">2015-16 Middle Years Application</option>';
+        echo '<option value="3">2015-16 Upper Years Application</option>';
+        echo '</select>';
+        echo '</p><br>';
 
         echo '<p><input type="submit" name="form-submitted" value="Send"></p>';
         echo '</form>';
 
     }
 
-    public function validate_form( $name, $email ) {
+    public function validate_form( $name, $email,$pdf ) {
 
         // If any field is left empty, add the error message to the error array
-        if ( empty($name) || empty($email) ) {
+        if ( empty($name) || empty($email) || empty($pdf) ) {
             array_push( $this->form_errors, 'No field should be left empty' );
         }
 
@@ -86,7 +96,8 @@ class Akr_file_download_tracker {
             $message = 'Test';
 
             // get the blog administrator's email address
-            $to = get_option('admin_email');
+            //$to = get_option('admin_email');
+            $to=$email;
 
             $headers = "From: $name <$email>" . "\r\n";
 
@@ -101,10 +112,11 @@ class Akr_file_download_tracker {
     public function process_functions() {
         if ( isset($_POST['form-submitted']) ) {
 
-            $name=$_POST["your-name"];
-            $email=$_POST["your-email"];
+            $name=isset($_POST["afdt-name"])?$_POST['afdt-name']:'';
+            $email=isset($_POST["afdt-email"])?$_POST['afdt-email']:'';
+            $pdf=$_POST['afdt-pdf'];
             // call validate_form() to validate the form values
-            $this->validate_form($name, $email);
+            $this->validate_form($name, $email, $pdf);
 
             // display form error if it exist
             if (is_array($this->form_errors)) {
