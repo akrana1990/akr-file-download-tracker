@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Ank Download Tracker
+Plugin Name: Akr File Download Tracker
 Plugin URI: https://github.com/akrana1990
 Description:  WordPress Plugin.
 Version: 0.1
@@ -14,8 +14,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 /* No direct access*/
 if (!defined('ABSPATH')) exit;
 
-define('ADT_PLUGIN_VER', '0.1');
-define('ADT_BASE_FILE', __FILE__);
+define('AFDT_PLUGIN_VER', '0.1');
+define('AFDT_BASE_FILE', __FILE__);
 //define('ADT_AJX_ACTION', 'adt_download');
 
 
@@ -40,17 +40,20 @@ class Akr_file_download_tracker {
             $email=$_POST["your-email"];
         }
         echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">';
+
         echo '<p>';
         echo 'Your Name (required) <br/>';
         echo '<input type="text" name="your-name" value="' . $name . '" size="40" />';
         echo '</p>';
+
         echo '<p>';
         echo 'Your Email (required) <br/>';
         echo '<input type="text" name="your-email" value="' . $email . '" size="40" />';
         echo '</p>';
-        echo '<p>';
+
         echo '<p><input type="submit" name="form-submitted" value="Send"></p>';
         echo '</form>';
+
     }
 
     public function validate_form( $name, $email ) {
