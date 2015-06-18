@@ -54,7 +54,7 @@ class Akr_file_download_tracker {
 
             <p><input type="submit" name="form-submitted" value="Send"></p>
         </form>
-        
+
         <?php
     }
 
@@ -84,7 +84,7 @@ class Akr_file_download_tracker {
         $pdf_url=wp_get_attachment_url($pdf_id);
 
         $subject = 'Test';
-        $message = 'Test'.$pdf_url;
+        $message = 'Test'."\r\n".$pdf_url;
 
         // get the blog administrator's email address
         //$to = get_option('admin_email');

@@ -63,6 +63,7 @@ class Akr_file_download_tracker_Admin
 
     function AFDT_options_page()
     {
+
         ?>
         <div class="wrap">
             <h2>hello test</h2>
