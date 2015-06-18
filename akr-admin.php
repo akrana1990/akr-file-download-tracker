@@ -34,7 +34,7 @@ class Akr_file_download_tracker_Admin
                 name tinytext NOT NULL,
                 email VARCHAR(100) NOT NULL,
                 file_title VARCHAR(100) NOT NULL ,
-                date TIMESTAMP DEFAULT '0000-00-00 00:00:00' NOT NULL,
+                date TIMESTAMP NOT NULL,
                 PRIMARY KEY id (id)
                 )";
 

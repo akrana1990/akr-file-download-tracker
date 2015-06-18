@@ -8,5 +8,5 @@
 
 global $wpdb;
 $table_name = $wpdb->prefix . "file_downloader";
-$sql="DROP $table_name";
+$sql="DROP TABLE $table_name";
 $wpdb->query($sql);

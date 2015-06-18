@@ -101,7 +101,7 @@ class Akr_file_download_tracker {
         }
         else
         {
-            die('hello');
+            echo '<br>Email Can\'t be send. Try again later.';
         }
 
     }
@@ -110,7 +110,7 @@ class Akr_file_download_tracker {
         global $wpdb;
         $table_name = $wpdb->prefix . "file_downloader";
         $file_title=get_the_title($pdf_id);
-        $sql="INSERT INTO $table_name(name,email,file_title,date) VALUES ('$name','$email','$file_title',CURTIME())";
+        $sql="INSERT INTO $table_name(name,email,file_title) VALUES ('$name','$email','$file_title')";
         $wpdb->query($sql);
     }
 
