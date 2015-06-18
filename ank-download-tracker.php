@@ -54,6 +54,7 @@ class Akr_file_download_tracker {
 
             <p><input type="submit" name="form-submitted" value="Send"></p>
         </form>
+        
         <?php
     }
 
