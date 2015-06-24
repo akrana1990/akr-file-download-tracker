@@ -17,11 +17,9 @@ class Akr_file_download_tracker_Admin
 
         /*settings link on plugin listing page*/
         add_filter('plugin_action_links_' . plugin_basename(AFDT_BASE_FILE), array($this, 'add_plugin_actions_links'), 10, 2);
-        /* Add settings link under admin->settings menu */
-        add_action('admin_menu', array($this, 'add_to_settings_menu'));
 
-        /* register ajax save function */
-        //add_action('wp_ajax_' . AFDT_AJX_ACTION, array(&$this, 'process_download_request'));
+
+        add_action( 'admin_menu', array($this, 'add_menu_example_list_table_page' ));
 
     }
 
@@ -29,7 +27,7 @@ class Akr_file_download_tracker_Admin
     {
         global $wpdb;
         $table_name = $wpdb->prefix . "file_downloader";
-        $sql = "CREATE TABLE $table_name (
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
                 id mediumint(9) NOT NULL AUTO_INCREMENT,
                 name tinytext NOT NULL,
                 email VARCHAR(100) NOT NULL,
@@ -40,6 +38,7 @@ class Akr_file_download_tracker_Admin
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
+
     }
 
     function add_plugin_actions_links($links, $file)
@@ -54,23 +53,36 @@ class Akr_file_download_tracker_Admin
         return $links;
     }
 
-    function add_to_settings_menu()
+    /**
+     * Menu item will allow us to load the page to display the table
+     */
+    public function add_menu_example_list_table_page()
     {
-
-        add_submenu_page('options-general.php', 'Afdt Download Tracker', 'Afdt Download Tracker', 'manage_options', $this->plugin_slug, array($this, 'AFDT_options_page'));
-
+        add_menu_page( 'Example List Table', 'Example List Table', 'manage_options', 'akr-wp-list-table.php', array($this, 'list_table_page') );
     }
 
-    function AFDT_options_page()
+    /**
+     * Display the list table page
+     *
+     * @return Void
+     */
+    public function list_table_page()
     {
-
+        $exampleListTable = new Afdt_Example_List_Table();
+        $exampleListTable->prepare_items();
         ?>
         <div class="wrap">
-            <h2>hello test</h2>
+            <div id="icon-users" class="icon32"></div>
+            <h2>Example List Table Page</h2>
+            <form id="events-filter" method="POST">
+                <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
+                <?php
+                $exampleListTable->display();
+                ?>
+            </form>
+
         </div>
     <?php
-
     }
-
 
 }

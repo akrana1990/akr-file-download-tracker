@@ -169,6 +169,9 @@ if (is_admin()) {
     //init admin class
     global $Akr_file_download_tracker_Admin;
     $Akr_file_download_tracker_Admin = new Akr_file_download_tracker_Admin();
+
+    require(trailingslashit(dirname(__FILE__)) . "akr-wp-list-table.php");
+
 } else {
     /*init front end part*/
     global $Akr_file_download_tracker;
