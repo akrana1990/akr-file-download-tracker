@@ -18,7 +18,6 @@ class Akr_file_download_tracker_Admin
         /*settings link on plugin listing page*/
         add_filter('plugin_action_links_' . plugin_basename(AFDT_BASE_FILE), array($this, 'add_plugin_actions_links'), 10, 2);
 
-
         add_action( 'admin_menu', array($this, 'afdt_setup_menus' ));
 
     }
@@ -122,11 +121,6 @@ class Akr_file_download_tracker_Admin
         <div class="wrap">
             <div id="icon-users" class="icon32"></div>
             <h2>Total PDF Downloads</h2>
-
-            <!--<form method="post">
-                <input type="hidden" name="page" value="example_list_table" />
-                <?php /*$exampleListTable->search_box('search', 'search_id'); */?>
-            </form>-->
 
             <form id="events-filter" method="POST">
                 <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
