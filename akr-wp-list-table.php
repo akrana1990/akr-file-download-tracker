@@ -23,6 +23,7 @@ class Afdt_Example_List_Table extends WP_List_Table
      */
     public function prepare_items()
     {
+
         $columns = $this->get_columns();
         $hidden = $this->get_hidden_columns();
         $sortable = $this->get_sortable_columns();
@@ -45,6 +46,7 @@ class Afdt_Example_List_Table extends WP_List_Table
 
         $this->_column_headers = array($columns, $hidden, $sortable);
         $this->items = $data;
+
     }
 
     /**
@@ -59,7 +61,9 @@ class Afdt_Example_List_Table extends WP_List_Table
             'id'          => 'ID',
             'name'        => 'Name',
             'email'       => 'Email',
-            'file_title'  => 'File Title',
+            'gender'      => 'Gender',
+            'nationality' => 'Nationality',
+            'file_title'  => 'Applying for Grade',
             'date'        => 'Date'
 
         );
@@ -84,7 +88,15 @@ class Afdt_Example_List_Table extends WP_List_Table
      */
     public function get_sortable_columns()
     {
-        return array('name' => array('name', false));
+        return array(
+            'name' => array('name', false),
+            'email' => array('email', false),
+            'id' => array('id', false),
+            'gender' => array('gender', false),
+            'nationality' => array('nationality', false),
+            'file_title' => array('file_title', false),
+            'date' => array('date', false),
+        );
     }
 
     /**
@@ -97,7 +109,16 @@ class Afdt_Example_List_Table extends WP_List_Table
         global $wpdb;
         $table_name = $wpdb->prefix . "file_downloader";
 
-        $query = "SELECT * FROM $table_name";
+        $search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
+
+        $search = esc_sql($search);
+
+       // $do_search = ( $search ) ? $wpdb->prepare("WHERE name LIKE '%s%' OR email LIKE '%s%%' ", $search ,$search) : '';
+
+        $do_search = ( $search ) ? "WHERE name like '%".$search."%' or email like '%".$search."%' or nationality like '%".$search."%'" : '';
+
+        $query = "SELECT * FROM $table_name "."$do_search";
+
         $data = $wpdb->get_results($query,ARRAY_A);
 
         return $data;
@@ -114,16 +135,15 @@ class Afdt_Example_List_Table extends WP_List_Table
     public function column_default( $item, $column_name )
     {
         switch( $column_name ) {
-            case 'id':
-            case 'name':
-            case 'email':
-            case 'file_title':
-            case 'date':
 
+            case 'gender':
+                $item[$column_name]=($item[$column_name])?'F':'M';
                 return $item[ $column_name ];
+                break;
+
 
             default:
-                return print_r( $item, true ) ;
+                return $item[ $column_name ];
         }
     }
 
@@ -208,19 +228,6 @@ class Afdt_Example_List_Table extends WP_List_Table
         //Detect when a bulk action is being triggered...
         if ( 'delete' === $this->current_action() ) {
 
-            // In our file that handles the request, verify the nonce.
-            //$nonce = esc_attr( $_REQUEST['_wpnonce'] );
-
-            /*if ( ! wp_verify_nonce( $nonce, 'sp_delete_customer' ) ) {
-                die( 'Go get a life script kiddies' );
-            }
-            else {
-                self::delete_record( absint( $_GET['customer'] ) );
-
-                wp_redirect( esc_url( add_query_arg() ) );
-                exit;
-            }*/
-
             self::delete_record( absint( $_GET['id'] ) );
 
             wp_redirect( esc_url( remove_query_arg(array( 'action', 'id')) ) );
@@ -234,9 +241,7 @@ class Afdt_Example_List_Table extends WP_List_Table
         ) {
 
             $delete_ids = esc_sql( $_POST['bulk-delete'] );
-            /*echo '<pre>';
-            print_r($delete_ids);
-            echo '</pre>';*/
+
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {
                 self::delete_record( $id );
@@ -244,7 +249,7 @@ class Afdt_Example_List_Table extends WP_List_Table
             }
 
             wp_redirect( esc_url( add_query_arg() ) );
-            exit;
+            //exit;
         }
     }
 
