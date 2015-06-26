@@ -42,8 +42,8 @@ class Akr_file_download_tracker {
             </p>
 
             <p>Gender <br/>
-                <input type="radio" name="afdt-sex" value="0">&nbsp;Male&emsp;
-                <input type="radio" name="afdt-sex" value="1">&nbsp;Female
+                <input type="radio" name="afdt-sex" value="M">&nbsp;Male&emsp;
+                <input type="radio" name="afdt-sex" value="F">&nbsp;Female
             </p>
 
             <p>Passport/Nationality <br/>
@@ -89,10 +89,10 @@ class Akr_file_download_tracker {
         <?php
     }
 
-    public function validate_form( $name, $email,$pdf_id, $nationality ) {
+    public function validate_form( $name, $email,$pdf_id, $gender, $nationality ) {
 
         // If any field is left empty, add the error message to the error array
-        if ( empty($name) || empty($email) || empty($pdf_id) || empty($nationality) ) {
+        if ( empty($name) || empty($email) || empty($pdf_id) ||empty($gender) || empty($nationality) ) {
             array_push( $this->form_errors, 'No field should be left empty' );
         }
 
@@ -187,7 +187,7 @@ class Akr_file_download_tracker {
             }
 
             // call validate_form() to validate the form values
-            $this->validate_form($name, $email, $pdf_id, $nationality);
+            $this->validate_form($name, $email, $pdf_id, $gender, $nationality);
 
             // display form error if it exist
             if (is_array($this->form_errors))

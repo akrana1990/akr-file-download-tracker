@@ -41,7 +41,7 @@ class Akr_file_download_tracker_Admin
                 id int(11) NOT NULL AUTO_INCREMENT,
                 name varchar(30) NOT NULL,
                 email varchar(200) NOT NULL,
-                gender tinyint(1) NOT NULL,
+                gender varchar(1) NOT NULL,
                 nationality varchar(100) NOT NULL,
                 file_title varchar(100) NOT NULL,
                 date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

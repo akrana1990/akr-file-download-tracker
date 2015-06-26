@@ -137,9 +137,9 @@ class Afdt_Example_List_Table extends WP_List_Table
         switch( $column_name ) {
 
             case 'gender':
-                $item[$column_name]=($item[$column_name])?'F':'M';
+                /*$item[$column_name]=($item[$column_name])?'F':'M';
                 return $item[ $column_name ];
-                break;
+                break;*/
 
 
             default:
