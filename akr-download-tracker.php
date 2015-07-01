@@ -61,7 +61,7 @@ class Akr_file_download_tracker {
                 If Dual Nationality
             </p>
 
-            <p id="afdt-second-nationality">Second Nationality <br/>
+            <p style="display: none" id="afdt-second-nationality">Second Nationality <br/>
                 <select name="afdt-nationality2">
                     <option selected disabled>Select</option>
                     <?php foreach($countries as $country) { ?>
@@ -139,11 +139,14 @@ class Akr_file_download_tracker {
             echo '<div style="background: #3b5998; color:#fff; padding:2px;margin:2px">';
             echo 'Thanks for contacting me, expect a response soon.';
             echo '</div>';
+
             return true;
         }
         else
         {
+
             echo '<br>Request Can\'t be send. Try again later.';
+
             return false;
         }
 
@@ -222,7 +225,7 @@ class Akr_file_download_tracker {
         //var_dump($params['file_ids']);
 
         wp_enqueue_script('afdt-user-script', plugins_url('assets/afdt-user.js', __FILE__), array('jquery'), 0.1, true);
-        wp_enqueue_style('adft-user-style', plugins_url('assets/afdt-user.css', __FILE__), array(), 0.1);
+        wp_enqueue_style('adft-user-style', plugins_url('assets/afdt-user.css', __FILE__), array(), 0.1, true);
 
         ob_start();
         $this->process_functions($params['file_ids']);
@@ -244,6 +247,7 @@ if (is_admin()) {
     require(trailingslashit(dirname(__FILE__)) . "akr-wp-list-table.php");
 
     require(trailingslashit(dirname(__FILE__)) . "akr-setup-email.php");
+    require(trailingslashit(dirname(__FILE__)) . "how-to-use.php");
 
 } else {
     /*init front end part*/

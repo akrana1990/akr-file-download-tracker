@@ -18,6 +18,7 @@ class Akr_file_download_tracker_Admin
         /*settings link on plugin listing page*/
         add_filter('plugin_action_links_' . plugin_basename(AFDT_BASE_FILE), array($this, 'add_plugin_actions_links'), 10, 2);
 
+
         add_action( 'admin_menu', array($this, 'afdt_setup_menus' ));
 
     }
@@ -89,6 +90,15 @@ class Akr_file_download_tracker_Admin
             'set-up-email',      // slug
             array($this,'afdt_set_up_email') // callback
         );
+
+        add_submenu_page(
+            'akr-wp-list-table',       // parent slug
+            'How to display form',    // page title
+            'How to display form',             // menu title
+            'manage_options',           // capability
+            'how-to-display-form',      // slug
+            array($this,'afdt_how_to_use') // callback
+        );
     }
 
     public function afdt_set_up_email()
@@ -101,6 +111,23 @@ class Akr_file_download_tracker_Admin
             <?php
                 $setUpEmail=new Afdt_Set_up_Email();
                 $setUpEmail->prepare_email();
+            ?>
+
+        </div>
+    <?php
+    }
+
+
+    public function afdt_how_to_use()
+    {
+        ?>
+        <div class="wrap">
+            <div id="icon-users" class="icon32"></div>
+            <h2>How to display form</h2>
+
+            <?php
+            $howToUse=new Afdt_How_To_Use();
+            $howToUse->how_to_display_form();
             ?>
 
         </div>
@@ -121,6 +148,11 @@ class Akr_file_download_tracker_Admin
         <div class="wrap">
             <div id="icon-users" class="icon32"></div>
             <h2>Total PDF Downloads</h2>
+
+            <!--<form method="post">
+                <input type="hidden" name="page" value="example_list_table" />
+                <?php /*$exampleListTable->search_box('search', 'search_id'); */?>
+            </form>-->
 
             <form id="events-filter" method="POST">
                 <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
