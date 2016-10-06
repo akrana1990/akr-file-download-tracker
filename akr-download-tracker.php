@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Akr File Download Tracker
-Plugin URI: https://github.com/akrana1990
+Plugin URI: https://github.com/ankitr90
 Description:  WordPress Plugin.
 Version: 0.1
 Author: Ankit Rana
-Author URI: http://akrana1990.github.io/
+Author URI: http://ankitr90.github.io/
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
